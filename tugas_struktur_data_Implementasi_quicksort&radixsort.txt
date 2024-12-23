@@ -1,0 +1,68 @@
+#Implementasi Quick sort
+#Quick Sort adalah algoritma sorting yang menggunakan teknik divide and conquer. Pada prinsipnya, quick sort memilih sebuah elemen sebagai pivot dan membagi elemen lainnya ke dalam dua sub-list, yaitu elemen yang lebih kecil dari pivot dan elemen yang lebih besar dari pivot.
+#Kemudian, secara rekursif, quick sort diterapkan pada sub-list tersebut.
+
+def quick_sort(arr):
+    # Basis kasus: jika panjang array kurang dari atau sama dengan 1, langsung kembalikan array
+    if len(arr) <= 1:
+        return arr
+    
+    # Memilih pivot, biasanya elemen terakhir dalam array
+    pivot = arr[-1]
+    
+    # Membagi elemen ke dalam dua kategori: lebih kecil dari pivot dan lebih besar dari pivot
+    left = [x for x in arr[:-1] if x <= pivot]  # elemen yang lebih kecil atau sama dengan pivot
+    right = [x for x in arr[:-1] if x > pivot]  # elemen yang lebih besar dari pivot
+    
+    # Rekursif: quick_sort diterapkan pada sublist kiri dan kanan, lalu gabungkan dengan pivot di tengah
+    return quick_sort(left) + [pivot] + quick_sort(right)
+
+# Contoh penggunaan
+arr = [10, 7, 8, 9, 1, 5]
+sorted_arr = quick_sort(arr)
+print("Hasil Quick Sort:", sorted_arr)
+
+#implementasi Radix Sort
+#Radix Sort adalah algoritma sorting yang bekerja dengan cara memisahkan elemen berdasarkan digit mereka, mulai dari digit terkecil (paling kanan).
+#Proses ini dilakukan secara iteratif untuk setiap digit, menggunakan algoritma seperti Counting Sort untuk setiap digit.
+
+def counting_sort(arr, exp):
+    # Fungsi untuk melakukan counting sort berdasarkan digit pada posisi 'exp'
+    n = len(arr)
+    output = [0] * n  # Array output yang akan menyimpan hasil sortir
+    count = [0] * 10  # Array untuk menghitung jumlah kemunculan setiap digit (0-9)
+    
+    # Hitung jumlah kemunculan untuk setiap digit
+    for i in range(n):
+        index = arr[i] // exp
+        count[index % 10] += 1
+    
+    # Ubah count[i] sehingga count[i] berisi posisi sebenarnya untuk elemen ke-i dalam output
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+    
+    # Bangun array output
+    for i in range(n - 1, -1, -1):
+        index = arr[i] // exp
+        output[count[index % 10] - 1] = arr[i]
+        count[index % 10] -= 1
+    
+    # Salin elemen yang sudah diurutkan ke array asli
+    for i in range(n):
+        arr[i] = output[i]
+
+def radix_sort(arr):
+    # Mencari digit terbesar
+    max_num = max(arr)
+    
+    # Proses sorting dimulai dari digit terkecil hingga digit terbesar
+    exp = 1
+    while max_num // exp > 0:
+        counting_sort(arr, exp)
+        exp *= 10  # Pindah ke digit berikutnya
+
+# Contoh penggunaan
+arr = [170, 45, 75, 90, 802, 24, 2, 66]
+radix_sort(arr)
+print("Hasil Radix Sort:", arr)
+
